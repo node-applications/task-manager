@@ -4,6 +4,11 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
 
+const sendmail = require('../emails/accounts');
+
+// image manipulator
+const sharp = require('sharp');
+
 /*
     Users model operation
 
@@ -26,6 +31,11 @@ router.post('/Users', async (req, res) => {
         await user.save();
 
         const token = await user.generateAuthToken();
+
+        // send an email to user email id
+        sendmail.sendWelcomeMail( user.email, 
+                  user.name
+        );
 
         res.status(200).send({user, token});
     }catch(e){
@@ -143,6 +153,7 @@ router.delete('/Users/me', auth , async (req, res) => {
         }
 
         res.send(user);
+        sendmail.sendCancelMail(user.email, user.name);
 
     } catch (e) {
         res.status(500).send(e);
@@ -225,7 +236,17 @@ const upload = multer({
 // To do this convert image to binary data
 router.post('/Users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
 
-    req.user.avatar = req.file.buffer;
+    // req.user.avatar = req.file.buffer;
+    /* 
+        TODO : currently image is cropped because of resize, so there is a loss of data.
+               resize data with whole picture but do not crop it.
+    */
+    const imageBuffer = await sharp(req.file.buffer).resize({
+                                                                width : 250,
+                                                                height : 250,
+                                                            })
+                                .png().toBuffer();
+    req.user.avatar = imageBuffer;
     await req.user.save();
     res.send();
 },

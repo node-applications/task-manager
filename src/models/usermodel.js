@@ -5,6 +5,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const taskModel = require('./taskmodel');
 
 const validator = require('validator');
+
 const userSchema = mongoose.Schema({
     name : {
         type : String,
@@ -86,7 +87,7 @@ userSchema.method(
             const user = this;
             const token = jsonwebtoken.sign({
                _id :  user._id
-            }, 'mysecretkeyvm',
+            }, process.env.MYSECRETKEY,
             {
                 expiresIn : '1 hour'
             });
@@ -102,7 +103,7 @@ userSchema.method(
                 // this meyhod is invoked
                 const user = this;
                 try {
-                    const decoded = jsonwebtoken.verify(token, 'mysecretkeyvm');
+                    const decoded = jsonwebtoken.verify(token, process.env.MYSECRETKEY);
                     return decoded;
                 } catch (e) {
                     throw new Error({error : 'token validation failed'});
@@ -127,6 +128,7 @@ userSchema.method(
             
             delete userObject.password;
             delete userObject.tokens;
+            delete userObject.avatar;
             return userObject;
         }
     }

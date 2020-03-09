@@ -9,11 +9,14 @@ const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ','');
        
-        const decode = jsonwebtoken.verify(token, 'mysecretkeyvm');
+        const decode = jsonwebtoken.verify(token, process.env.MYSECRETKEY);
 
         //console.log(decode);
         const user = await userModel.findOne({
             _id : decode._id,
+
+            // following is the path which comes with schema
+            // TODO : explore paths
             'tokens.token' : token
         });
 
