@@ -2,4 +2,3 @@ node_modules/
 .DS_Store
 config/
 playground/
-package-lock.json
