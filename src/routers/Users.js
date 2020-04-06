@@ -37,7 +37,7 @@ router.post('/Users', async (req, res) => {
                   user.name
         );
 
-        res.status(200).send({user, token});
+        res.status(201).send({user, token});
     }catch(e){
         console.log('Error', e)
         res.status(500).send(e);
@@ -147,10 +147,12 @@ router.delete('/Users/me', auth , async (req, res) => {
     try {
         //const user = await UserModel.findByIdAndDelete(req.params.id);
         const user = req.user;
-        await user.delete();
+        
         if(!user){
             return res.status(404).send();
         }
+
+        await user.delete();
 
         res.send(user);
         sendmail.sendCancelMail(user.email, user.name);

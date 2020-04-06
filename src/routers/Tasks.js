@@ -6,6 +6,8 @@ const router = express.Router();
 
 /*
   All Tasks operations
+
+  TODO : links.mead.io/extratests
 */
 router.post('/Tasks', auth, async (req, res) => {
 
@@ -17,7 +19,7 @@ router.post('/Tasks', auth, async (req, res) => {
 
     try{
         await task.save();
-        res.status(200).send(task);
+        res.status(201).send(task);
     }catch(e){
         res.status(500).send(e);
     }

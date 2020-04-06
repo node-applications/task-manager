@@ -8,7 +8,7 @@ const dbname = process.env.DBNAME;
 const connectDb = (connectionUrl, dbname) => {
 
     mongoose.connect(
-        connectionUrl+'/'+dbname,
+        connectionUrl.replace('@DB_NAME',dbname),
         {
             useCreateIndex : true,
             useNewUrlParser : true,
