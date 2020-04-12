@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const userModel = require('../../src/models/usermodel');
+<<<<<<< HEAD
+//const taskModel = require('../../src/models/taskmodel');
+=======
 const userModel = require('../../src/models/taskmodel');
+>>>>>>> ab7cbd03e46d6ed8ad4b29f620137852cf9f98d7
 
 // create initial user
 

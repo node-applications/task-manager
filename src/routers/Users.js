@@ -1,8 +1,17 @@
+/**
+ * A router can have more than one middleware
+ */
+
 const express = require('express');
 const UserModel = require('../models/usermodel');
 const auth = require('../middleware/auth');
 const router = express.Router();
 const multer = require('multer');
+
+// redis cache
+const { redisSet, redisGet } = require('../db/rediscache');
+
+
 
 const sendmail = require('../emails/accounts');
 
@@ -133,6 +142,7 @@ router.post('/User/logoutAll', auth , async (req, res) => {
         res.send();
 
     } catch (e) {
+        console.log(e);
         res.status(500).send();
     }
 });
